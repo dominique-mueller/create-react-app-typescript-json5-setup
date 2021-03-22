@@ -1,0 +1,54 @@
+{
+  "name": "create-react-app-typescript-json5-setup",
+  "version": "1.0.0",
+  "description": "Using json5 files in a TypeScript React project, based on create-react-app",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dominique-mueller/create-react-app-typescript-web-worker-setup"
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "start:build": "lite-server --baseDir=\"build\"",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test --watchAll=false",
+    "test:watch": "react-app-rewired test"
+  },
+  "dependencies": {
+    "comlink": "4.3.x",
+    "react": "17.0.x",
+    "react-dom": "17.0.x"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.11.x",
+    "@testing-library/react": "11.1.x",
+    "@testing-library/user-event": "12.2.x",
+    "@types/jest": "26.0.x",
+    "@types/node": "14.14.x",
+    "@types/react": "16.9.x",
+    "@types/react-dom": "16.9.x",
+    "json5-loader": "4.0.x",
+    "lite-server": "2.5.x",
+    "react-app-rewired": "2.1.x",
+    "react-scripts": "4.0.x",
+    "ts-jest": "26.4.x",
+    "ts-node": "9.0.x",
+    "typescript": "4.0.x"
+  },
+  "config-overrides-path": "react-app-rewired.config.js",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

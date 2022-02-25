@@ -20,29 +20,49 @@ to import and use them just like plain `json` files.
 
 ### 1. Install dependencies
 
-First of all, we need a few new dependencies. In particular:
-
-- We need **[react-app-rewired](https://github.com/timarney/react-app-rewired)** to hook into the Webpack configuration that `react-scripts`
-  uses under the hood (without having to eject the config)
-- We use the Webpack **[json5-loader](https://github.com/webpack-contrib/json5-loader)** to enable json5 file support in our build process
-
-Add both dependencies to your `package.json` file and install them. For example:
+First of all, we ne need **[react-app-rewired](https://github.com/timarney/react-app-rewired)** to hook into the Webpack configuration that
+`react-scripts` uses under the hood (without having to eject the config). For example:
 
 ```diff
   {
     "devDependencies": {
-+     "react-app-rewired": "2.1.x",
-+     "json-loader": "4.0.x"
++     "react-app-rewired": "2.2.x",
+    }
+  }
+```
+
+#### 1.1 react-scripts v5
+
+We also need **[json5](https://github.com/json5/json5)** to enable json5 file support in our build
+process. For example:
+
+```diff
+  {
+    "devDependencies": {
++     "json5": "2.2.x",
+    }
+  }
+```
+
+#### 1.2 react-scripts v4
+
+We also need the Webpack **[json5-loader](https://github.com/webpack-contrib/json5-loader)** to enable json5 file support in our build
+process. For example:
+
+```diff
+  {
+    "devDependencies": {
++     "json5-loader": "4.0.x"
     }
   }
 ```
 
 <br>
 
-### 2. Customize the build process
+### 2. Customize the build scripts
 
-First, replace all mentions of `react-scripts` within the `scripts` area of your `package.json` file by `react-app-rewired`. This enables us
-to tap into the build process in the next step. For example:
+Replace all mentions of `react-scripts` within the `scripts` area of your `package.json` file by `react-app-rewired`. This enables us to tap
+into the build process in the next step. For example:
 
 ```diff
   {
@@ -57,9 +77,51 @@ to tap into the build process in the next step. For example:
   }
 ```
 
-Then, create a file named `react-app-rewired.config.js` (or whatever name you prefer) within the root folder of your project. This file will
-be used by `react-app-rewired` when the build process runs, and allows us to customize the underlying Webpack configuration before the build
-runs. Fill it with the following content:
+<br>
+
+### 3. Customize the build configuration
+
+Create a file named `react-app-rewired.config.js` (or whatever name you prefer) within the root folder of your project. This file will be
+used by `react-app-rewired` when the build process runs, and allows us to customize the underlying Webpack configuration before the build
+runs. Reference the `react-app-rewired.config.js` file in your `package.json` file by adding the following line:
+
+```diff
+  {
++   "config-overrides-path": "react-app-rewired.config.js",
+  }
+```
+
+#### 3.1 react-scripts v5
+
+Fill it with the following content:
+
+```js
+const json5 = require('json5');
+
+/**
+ * React App Rewired Config
+ */
+module.exports = {
+  // Update webpack config to use custom loader for .json5 files
+  webpack: (config) => {
+    // Add JSON5 file support
+    // See <https://github.com/webpack/webpack/tree/main/examples/custom-json-modules>
+    config.module.rules.push({
+      test: /\.json5$/,
+      type: 'json',
+      parser: {
+        parse: json5.parse,
+      },
+    });
+
+    return config;
+  },
+};
+```
+
+#### 3.2 react-scripts v4
+
+Fill it with the following content:
 
 ```js
 /**
@@ -83,17 +145,9 @@ module.exports = {
 };
 ```
 
-Finally, reference the `react-app-rewired.config.js` file in your `package.json` file by adding the following line:
-
-```diff
-  {
-+   "config-overrides-path": "react-app-rewired.config.js",
-  }
-```
-
 <br>
 
-### 3. Add typings
+### 4. Add typings
 
 Next, we need to enable TypeScript to understand `json5` files, so that eventually we can import `json5` files just like we would import
 plain `json` files. To do that, create a typings file in your project (e.g. `typings.d.ts` in `src`) with the following content:
@@ -112,7 +166,7 @@ declare module '*.json5' {
 
 <br>
 
-### 4. Import json5 files
+### 5. Import json5 files
 
 Now you can start using `json5` files! Just import them like `json` files, and use them in your code. The create-react-app (or Webpack under
 the hood, to be particular) will include the file contents in your bundle. For example:
